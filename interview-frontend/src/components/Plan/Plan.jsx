@@ -4,9 +4,9 @@ import {
   addProcedureToPlan,
   getPlanProcedures,
   getProcedures,
-  getUsers,
+  getUsers
 } from "../../api/api";
-import Layout from '../Layout/Layout';
+import Layout from "../Layout/Layout";
 import ProcedureItem from "./ProcedureItem/ProcedureItem";
 import PlanProcedureItem from "./PlanProcedureItem/PlanProcedureItem";
 
@@ -23,7 +23,7 @@ const Plan = () => {
       var users = await getUsers();
 
       var userOptions = [];
-      users.map((u) => userOptions.push({ label: u.name, value: u.userId }));
+      users.map(u => userOptions.push({ label: u.name, value: u.userId }));
 
       setUsers(userOptions);
       setProcedures(procedures);
@@ -31,12 +31,14 @@ const Plan = () => {
     })();
   }, [id]);
 
-  const handleAddProcedureToPlan = async (procedure) => {
-    const hasProcedureInPlan = planProcedures.some((p) => p.procedureId === procedure.procedureId);
+  const handleAddProcedureToPlan = async procedure => {
+    const hasProcedureInPlan = planProcedures.some(
+      p => p.procedureId === procedure.procedureId
+    );
     if (hasProcedureInPlan) return;
 
     await addProcedureToPlan(id, procedure.procedureId);
-    setPlanProcedures((prevState) => {
+    setPlanProcedures(prevState => {
       return [
         ...prevState,
         {
@@ -44,9 +46,9 @@ const Plan = () => {
           procedureId: procedure.procedureId,
           procedure: {
             procedureId: procedure.procedureId,
-            procedureTitle: procedure.procedureTitle,
-          },
-        },
+            procedureTitle: procedure.procedureTitle
+          }
+        }
       ];
     });
   };
@@ -66,7 +68,7 @@ const Plan = () => {
                   <div className="col">
                     <h4>Procedures</h4>
                     <div>
-                      {procedures.map((p) => (
+                      {procedures.map(p => (
                         <ProcedureItem
                           key={p.procedureId}
                           procedure={p}
@@ -79,7 +81,7 @@ const Plan = () => {
                   <div className="col">
                     <h4>Added to Plan</h4>
                     <div>
-                      {planProcedures.map((p) => (
+                      {planProcedures.map(p => (
                         <PlanProcedureItem
                           key={p.procedure.procedureId}
                           procedure={p.procedure}

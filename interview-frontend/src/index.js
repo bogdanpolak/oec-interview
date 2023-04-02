@@ -7,21 +7,21 @@ import Plan from "./components/Plan/Plan";
 import ErrorPage from "./components/Error/Error";
 
 const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <App />,
-        errorElement: <ErrorPage />,
-    },
-    {
-        path: "/plan/:id",
-        element: <Plan />,
-        errorElement: <ErrorPage />,
-    },
+  {
+    path: "/",
+    element: <App />,
+    errorElement: <ErrorPage />
+  },
+  {
+    path: "/plan/:id",
+    element: <Plan />,
+    errorElement: <ErrorPage />
+  }
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-    <React.StrictMode>
-        <RouterProvider router={router} />
-    </React.StrictMode>
+  <React.StrictMode>
+    <RouterProvider router={router} />
+  </React.StrictMode>
 );
