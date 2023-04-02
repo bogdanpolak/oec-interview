@@ -1,17 +1,36 @@
-Interview/bin/
-Interview/obj/
+#  .NET - User-specific files
+*.suo
+*.user
+*.sln.docstates
 
-Interview/RL.Backend/bin/
-Interview/RL.Backend/obj/
+# .NET - Build results
+[Bb]in/
+[Oo]bj/
 
-Interview/RL.Backend.UnitTests/bin/
-Interview/RL.Backend.UnitTests/obj/
+# .NET - NuGet Packages Directory
+## TODO: If you have NuGet Package Restore enabled, uncomment the next line
+packages/
+## TODO: If the tool you use requires repositories.config, also uncomment the next line
+!packages/repositories.config
 
-Interview/RL.Data/bin/
-Interview/RL.Data/obj/
+# React
+node_modules
+
+# Visual Studio & ReSharper
+.vs/
+.vscode/
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
 
 # Rider
 .idea/
 
-# Mac OS X
+# System: Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# System: Mac OS X
 .DS_Store
