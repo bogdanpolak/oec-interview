@@ -5,11 +5,16 @@ namespace RL.Data.DataModels;
 
 public class Plan : IChangeTrackable
 {
-    public Plan() => PlanProcedures = new List<PlanProcedure>();
+    public Plan()
+    {
+        PlanProcedures = new List<PlanProcedure>();
+        ProcedureUsers = new LinkedList<ProcedureUser>();
+    }
     [Key]
     public int PlanId { get; set; }
     public DateTime CreateDate { get; set; }
     public DateTime UpdateDate { get; set; }
 
     public virtual ICollection<PlanProcedure> PlanProcedures { get; set; }
+    public virtual ICollection<ProcedureUser> ProcedureUsers { get; set; }
 }
