@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using RL.Data;
 using RL.Data.DataModels;
+using System.Data.Entity;
 
 namespace RL.Backend.Controllers;
 

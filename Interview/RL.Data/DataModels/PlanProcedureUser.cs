@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RL.Data.DataModels
 {
-    public class ProcedureUser : IChangeTrackable
+    public class PlanProcedureUser : IChangeTrackable
     {
         public int PlanId { get; set; }
         public int ProcedureId { get; set; }

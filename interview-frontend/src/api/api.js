@@ -45,7 +45,7 @@ export const getProcedures = async () => {
 };
 
 export const getPlanProcedures = async (planId) => {
-    const url = `${api_url}/PlanProcedure?$filter=planId eq ${planId}&$expand=procedure`;
+    const url = `${api_url}/PlanProcedure?$filter=planId eq ${planId}&$expand=procedure($expand=planprocedureusers)`;
     const response = await fetch(url, {
         method: "GET",
     });
@@ -83,8 +83,25 @@ export const addUserToProcedure = async (planId, procedureId, userIds) => {
     return true;
 };
 
-export const getProcedureUsers = async (planId, procedureId) => {
-    const url = `${api_url}/ProcedureUser?$filter=planId eq ${planId} and procedureId eq ${procedureId}&$expand=user`;
+export const deleteUsersFromProcedure = async (planId, procedureId, userIds) => {
+    const url = `${api_url}/Procedures/DeleteUsersFromProcedure`;
+    var command = { planId: planId, procedureId: procedureId };
+    const response = await fetch(url, {
+        method: "DELETE",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(command),
+    });
+
+    if (!response.ok) throw new Error("Failed to delete users from procedure");
+
+    return true;
+};
+
+export const getPlanProcedureUsers = async (planId, procedureId) => {
+    const url = `${api_url}/PlanProcedureUser?$filter=planId eq ${planId} and procedureId eq ${procedureId}&$expand=user`;
     const response = await fetch(url, {
         method: "GET",
     });

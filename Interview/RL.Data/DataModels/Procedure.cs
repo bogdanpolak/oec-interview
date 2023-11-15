@@ -8,7 +8,7 @@ public class Procedure : IChangeTrackable
 {
     public Procedure()
     {
-        ProcedureUsers = new LinkedList<ProcedureUser>();
+        PlanProcedureUsers = new LinkedList<PlanProcedureUser>();
     }
     [Key]
     public int ProcedureId { get; set; }
@@ -16,5 +16,5 @@ public class Procedure : IChangeTrackable
     public DateTime CreateDate { get; set; }
     public DateTime UpdateDate { get; set; }
     [ForeignKey("ProcedureId")]
-    public virtual ICollection<ProcedureUser> ProcedureUsers { get; set; }
+    public virtual ICollection<PlanProcedureUser> PlanProcedureUsers { get; set; }
 }

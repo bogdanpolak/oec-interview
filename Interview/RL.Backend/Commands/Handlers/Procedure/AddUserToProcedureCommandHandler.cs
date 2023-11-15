@@ -4,6 +4,7 @@ using RL.Backend.Exceptions;
 using RL.Backend.Models;
 using RL.Data;
 using RL.Data.DataModels;
+using System.Linq;
 
 namespace RL.Backend.Commands.Handlers.Procedure
 {
@@ -25,37 +26,38 @@ namespace RL.Backend.Commands.Handlers.Procedure
                     return ApiResponse<Unit>.Fail(new BadRequestException("Invalid ProcedureId"));
 
                 var plan = await _context.Plans
-                .Include(p => p.ProcedureUsers)
+                .Include(p => p.PlanProcedureUsers)
                 .FirstOrDefaultAsync(p => p.PlanId == request.PlanId);
                 if (plan is null)
                     return ApiResponse<Unit>.Fail(new NotFoundException($"PlanId: {request.PlanId} not found"));
 
                 var procedures = await _context.Procedures
-                    .Include(p => p.ProcedureUsers)
+                    .Include(p => p.PlanProcedureUsers)
                     .FirstOrDefaultAsync(p => p.ProcedureId == request.ProcedureId);
                 if (procedures is null)
                     return ApiResponse<Unit>.Fail(new NotFoundException($"ProcedureId: {request.ProcedureId} not found"));
 
-                if (request.UserIds is null || request.UserIds.Count() < 1)
-                {
-                    procedures.ProcedureUsers.Clear();
-                }
-                else
-                {
-                    procedures.ProcedureUsers.Clear();
-                    var validIds = await _context.Users.Select(u => u.UserId).ToListAsync();
-                    bool isValidIds = request.UserIds.All(x => validIds.Contains(x));
-                    if (!isValidIds)
-                    {
-                        return ApiResponse<Unit>.Fail(new NotFoundException($"Invalid UserIds"));
-                    }
 
-                    foreach (var userId in request.UserIds)
-                    {
-                        //    var procedureUser = await _context.ProcedureUsers
-                        //.FirstOrDefaultAsync(pu => pu.PlanId == request.PlanId && pu.ProcedureId == request.ProcedureId && pu.UserId == userId);
-                        //    if (procedureUser is not null)
-                        procedures.ProcedureUsers.Add(new ProcedureUser
+                var validIds = await _context.Users.Select(u => u.UserId).ToListAsync();
+                bool isValidIds = request.UserIds.All(x => validIds.Contains(x));
+                if (!isValidIds)
+                {
+                    return ApiResponse<Unit>.Fail(new NotFoundException($"Invalid UserIds"));
+                }
+
+                var userIdsDoNotExist = procedures.PlanProcedureUsers.Where(ppu => ppu.PlanId == request.PlanId && ppu.ProcedureId == request.ProcedureId).Select(ppu => ppu.UserId).Except(request.UserIds);
+                if (userIdsDoNotExist.Any())
+                {
+                    var removedUsers = procedures.PlanProcedureUsers.Where(ppu => ppu.PlanId == request.PlanId && ppu.ProcedureId == request.ProcedureId && userIdsDoNotExist.Contains(ppu.UserId));
+                    if (removedUsers.Any())
+                        _context.PlanProcedureUsers.RemoveRange(removedUsers);
+                }
+                foreach (var userId in request.UserIds)
+                {
+                    var usersExist = procedures.PlanProcedureUsers.Where(ppu => ppu.PlanId == request.PlanId && ppu.ProcedureId == request.ProcedureId && ppu.UserId == userId).FirstOrDefault();
+
+                    if (usersExist is null)
+                        procedures.PlanProcedureUsers.Add(new PlanProcedureUser
                         {
                             PlanId = request.PlanId,
                             Plan = plan,
@@ -63,7 +65,6 @@ namespace RL.Backend.Commands.Handlers.Procedure
                             Procedure = procedures,
                             UserId = userId
                         });
-                    }
                 }
                 await _context.SaveChangesAsync();
 

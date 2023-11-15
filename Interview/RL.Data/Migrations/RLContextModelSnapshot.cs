@@ -55,6 +55,32 @@ namespace RL.Data.Migrations
                     b.ToTable("PlanProcedures");
                 });
 
+            modelBuilder.Entity("RL.Data.DataModels.PlanProcedureUser", b =>
+                {
+                    b.Property<int>("PlanId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ProcedureId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UpdateDate")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("PlanId", "ProcedureId", "UserId");
+
+                    b.HasIndex("ProcedureId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PlanProcedureUsers");
+                });
+
             modelBuilder.Entity("RL.Data.DataModels.Procedure", b =>
                 {
                     b.Property<int>("ProcedureId")
@@ -777,32 +803,6 @@ namespace RL.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("RL.Data.DataModels.ProcedureUser", b =>
-                {
-                    b.Property<int>("PlanId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ProcedureId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("UpdateDate")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("PlanId", "ProcedureId", "UserId");
-
-                    b.HasIndex("ProcedureId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("ProcedureUsers");
-                });
-
             modelBuilder.Entity("RL.Data.DataModels.User", b =>
                 {
                     b.Property<int>("UserId")
@@ -872,16 +872,16 @@ namespace RL.Data.Migrations
                     b.Navigation("Procedure");
                 });
 
-            modelBuilder.Entity("RL.Data.DataModels.ProcedureUser", b =>
+            modelBuilder.Entity("RL.Data.DataModels.PlanProcedureUser", b =>
                 {
                     b.HasOne("RL.Data.DataModels.Plan", "Plan")
-                        .WithMany("ProcedureUsers")
+                        .WithMany("PlanProcedureUsers")
                         .HasForeignKey("PlanId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("RL.Data.DataModels.Procedure", "Procedure")
-                        .WithMany("ProcedureUsers")
+                        .WithMany("PlanProcedureUsers")
                         .HasForeignKey("ProcedureId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -901,14 +901,14 @@ namespace RL.Data.Migrations
 
             modelBuilder.Entity("RL.Data.DataModels.Plan", b =>
                 {
-                    b.Navigation("PlanProcedures");
+                    b.Navigation("PlanProcedureUsers");
 
-                    b.Navigation("ProcedureUsers");
+                    b.Navigation("PlanProcedures");
                 });
 
             modelBuilder.Entity("RL.Data.DataModels.Procedure", b =>
                 {
-                    b.Navigation("ProcedureUsers");
+                    b.Navigation("PlanProcedureUsers");
                 });
 #pragma warning restore 612, 618
         }

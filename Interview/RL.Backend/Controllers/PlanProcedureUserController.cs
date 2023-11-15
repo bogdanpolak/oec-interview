@@ -7,12 +7,12 @@ namespace RL.Backend.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class ProcedureUserController : ControllerBase
+public class PlanProcedureUserController : ControllerBase
 {
-    private readonly ILogger<ProcedureUserController> _logger;
+    private readonly ILogger<PlanProcedureUserController> _logger;
     private readonly RLContext _context;
 
-    public ProcedureUserController(ILogger<ProcedureUserController> logger, RLContext context)
+    public PlanProcedureUserController(ILogger<PlanProcedureUserController> logger, RLContext context)
     {
         _logger = logger;
         _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -20,8 +20,8 @@ public class ProcedureUserController : ControllerBase
 
     [HttpGet]
     [EnableQuery]
-    public IEnumerable<ProcedureUser> Get()
+    public IEnumerable<PlanProcedureUser> Get()
     {
-        return _context.ProcedureUsers;
+        return _context.PlanProcedureUsers;
     }
 }

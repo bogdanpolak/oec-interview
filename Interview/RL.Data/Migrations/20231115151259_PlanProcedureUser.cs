@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RL.Data.Migrations
 {
-    public partial class ProcedureUser : Migration
+    public partial class PlanProcedureUser : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ProcedureUsers",
+                name: "PlanProcedureUsers",
                 columns: table => new
                 {
                     PlanId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -21,21 +21,21 @@ namespace RL.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProcedureUsers", x => new { x.PlanId, x.ProcedureId, x.UserId });
+                    table.PrimaryKey("PK_PlanProcedureUsers", x => new { x.PlanId, x.ProcedureId, x.UserId });
                     table.ForeignKey(
-                        name: "FK_ProcedureUsers_Plans_PlanId",
+                        name: "FK_PlanProcedureUsers_Plans_PlanId",
                         column: x => x.PlanId,
                         principalTable: "Plans",
                         principalColumn: "PlanId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProcedureUsers_Procedures_ProcedureId",
+                        name: "FK_PlanProcedureUsers_Procedures_ProcedureId",
                         column: x => x.ProcedureId,
                         principalTable: "Procedures",
                         principalColumn: "ProcedureId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProcedureUsers_Users_UserId",
+                        name: "FK_PlanProcedureUsers_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "UserId",
@@ -43,20 +43,20 @@ namespace RL.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProcedureUsers_ProcedureId",
-                table: "ProcedureUsers",
+                name: "IX_PlanProcedureUsers_ProcedureId",
+                table: "PlanProcedureUsers",
                 column: "ProcedureId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProcedureUsers_UserId",
-                table: "ProcedureUsers",
+                name: "IX_PlanProcedureUsers_UserId",
+                table: "PlanProcedureUsers",
                 column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ProcedureUsers");
+                name: "PlanProcedureUsers");
         }
     }
 }
