@@ -2,18 +2,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using RL.Data;
 using RL.Data.DataModels;
-using System.Data.Entity;
 
 namespace RL.Backend.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class PlanProcedureController : ControllerBase
+public class PlanProcedureUserController : ControllerBase
 {
-    private readonly ILogger<PlanProcedureController> _logger;
+    private readonly ILogger<PlanProcedureUserController> _logger;
     private readonly RLContext _context;
 
-    public PlanProcedureController(ILogger<PlanProcedureController> logger, RLContext context)
+    public PlanProcedureUserController(ILogger<PlanProcedureUserController> logger, RLContext context)
     {
         _logger = logger;
         _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -21,8 +20,8 @@ public class PlanProcedureController : ControllerBase
 
     [HttpGet]
     [EnableQuery]
-    public IEnumerable<PlanProcedure> Get()
+    public IEnumerable<PlanProcedureUser> Get()
     {
-        return _context.PlanProcedures;
+        return _context.PlanProcedureUsers;
     }
 }

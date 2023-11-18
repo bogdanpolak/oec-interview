@@ -15,7 +15,6 @@ const Plan = () => {
   const [procedures, setProcedures] = useState([]);
   const [planProcedures, setPlanProcedures] = useState([]);
   const [users, setUsers] = useState([]);
-
   useEffect(() => {
     (async () => {
       var procedures = await getProcedures();
@@ -23,7 +22,9 @@ const Plan = () => {
       var users = await getUsers();
 
       var userOptions = [];
-      users.map((u) => userOptions.push({ label: u.name, value: u.userId }));
+      users.forEach(u => {
+        userOptions.push({ label: u.name, value: u.userId });
+      });
 
       setUsers(userOptions);
       setProcedures(procedures);
@@ -82,6 +83,7 @@ const Plan = () => {
                       {planProcedures.map((p) => (
                         <PlanProcedureItem
                           key={p.procedure.procedureId}
+                          planId={id}
                           procedure={p.procedure}
                           users={users}
                         />
