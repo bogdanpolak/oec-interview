@@ -37,7 +37,23 @@ namespace RL.Backend.Commands.Handlers.Procedure
                 if (procedures is null)
                     return ApiResponse<Unit>.Fail(new NotFoundException($"ProcedureId: {request.ProcedureId} not found"));
 
-                procedures.PlanProcedureUsers.Clear();
+                if (request.UserIds is null || request.UserIds.Count() < 1)
+                    procedures.PlanProcedureUsers.Clear();
+                else
+                {
+                    var validIds = await _context.Users.Select(u => u.UserId).ToListAsync();
+                    bool isValidIds = request.UserIds.All(x => validIds.Contains(x));
+                    if (!isValidIds)
+                        return ApiResponse<Unit>.Fail(new NotFoundException($"Invalid UserIds"));
+
+                    var userIdsDoNotExist = procedures.PlanProcedureUsers.Where(ppu => ppu.PlanId == request.PlanId && ppu.ProcedureId == request.ProcedureId).Select(ppu => ppu.UserId).Except(request.UserIds);
+                    if (userIdsDoNotExist.Any())
+                    {
+                        var removedUsers = procedures.PlanProcedureUsers.Where(ppu => ppu.PlanId == request.PlanId && ppu.ProcedureId == request.ProcedureId && userIdsDoNotExist.Contains(ppu.UserId));
+                        if (removedUsers.Any())
+                            _context.PlanProcedureUsers.RemoveRange(removedUsers);
+                    }
+                }
                 await _context.SaveChangesAsync();
 
                 return ApiResponse<Unit>.Succeed(new Unit());

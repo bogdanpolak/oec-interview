@@ -34,8 +34,17 @@ public class ProceduresController : ControllerBase
     [HttpPost("AddUserToProcedure")]
     public async Task<IActionResult> AddUserToProcedure(AddUserToProcedureCommand command, CancellationToken token)
     {
-        var response = await _mediator.Send(command, token);
+        DeleteUsersFromProcedureCommand deleteCommand = new DeleteUsersFromProcedureCommand()
+        {
+            PlanId = command.PlanId,
+            ProcedureId = command.ProcedureId,
+            UserIds = command.UserIds,
+        };
+        var deleteResponse = await _mediator.Send(deleteCommand,token);
+        if (!deleteResponse.Succeeded) 
+            return deleteResponse.ToActionResult();
 
+        var response = await _mediator.Send(command, token);
         return response.ToActionResult();
     }
 

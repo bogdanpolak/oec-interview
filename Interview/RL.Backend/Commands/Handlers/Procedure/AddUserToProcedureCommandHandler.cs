@@ -41,17 +41,8 @@ namespace RL.Backend.Commands.Handlers.Procedure
                 var validIds = await _context.Users.Select(u => u.UserId).ToListAsync();
                 bool isValidIds = request.UserIds.All(x => validIds.Contains(x));
                 if (!isValidIds)
-                {
                     return ApiResponse<Unit>.Fail(new NotFoundException($"Invalid UserIds"));
-                }
 
-                var userIdsDoNotExist = procedures.PlanProcedureUsers.Where(ppu => ppu.PlanId == request.PlanId && ppu.ProcedureId == request.ProcedureId).Select(ppu => ppu.UserId).Except(request.UserIds);
-                if (userIdsDoNotExist.Any())
-                {
-                    var removedUsers = procedures.PlanProcedureUsers.Where(ppu => ppu.PlanId == request.PlanId && ppu.ProcedureId == request.ProcedureId && userIdsDoNotExist.Contains(ppu.UserId));
-                    if (removedUsers.Any())
-                        _context.PlanProcedureUsers.RemoveRange(removedUsers);
-                }
                 foreach (var userId in request.UserIds)
                 {
                     var usersExist = procedures.PlanProcedureUsers.Where(ppu => ppu.PlanId == request.PlanId && ppu.ProcedureId == request.ProcedureId && ppu.UserId == userId).FirstOrDefault();

@@ -45,7 +45,7 @@ export const getProcedures = async () => {
 };
 
 export const getPlanProcedures = async (planId) => {
-    const url = `${api_url}/PlanProcedure?$filter=planId eq ${planId}&$expand=procedure($expand=planprocedureusers)`;
+    const url = `${api_url}/PlanProcedure?$filter=planId eq ${planId}&$expand=procedure($expand=planprocedureusers($filter=planId eq ${planId}))`;
     const response = await fetch(url, {
         method: "GET",
     });
@@ -85,7 +85,7 @@ export const addUserToProcedure = async (planId, procedureId, userIds) => {
 
 export const deleteUsersFromProcedure = async (planId, procedureId, userIds) => {
     const url = `${api_url}/Procedures/DeleteUsersFromProcedure`;
-    var command = { planId: planId, procedureId: procedureId };
+    var command = { planId: planId, procedureId: procedureId, userIds: userIds };
     const response = await fetch(url, {
         method: "DELETE",
         headers: {

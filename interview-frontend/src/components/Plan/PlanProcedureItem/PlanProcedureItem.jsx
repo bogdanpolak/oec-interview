@@ -8,7 +8,7 @@ const PlanProcedureItem = ({ planId, procedure, users }) => {
 
     useEffect(() => {
         if (procedure && procedure.planProcedureUsers && procedure.planProcedureUsers.length > 0) {
-            var ppUsers = procedure.planProcedureUsers.filter(ppu => ppu.planId === Number(planId) && ppu.procedureId === procedure.procedureId)
+            var ppUsers = procedure.planProcedureUsers.filter(ppu => ppu.procedureId === procedure.procedureId)
             if (ppUsers && ppUsers.length > 0) {
                 var pUsers = [];
                 ppUsers.forEach(ppu => {
@@ -29,7 +29,7 @@ const PlanProcedureItem = ({ planId, procedure, users }) => {
         if (userIds.length > 0)
             await addUserToProcedure(planId, procedure.procedureId, userIds);
         else
-            await deleteUsersFromProcedure(planId, procedure.procedureId);
+            await deleteUsersFromProcedure(planId, procedure.procedureId, userIds);
     };
 
     return (
